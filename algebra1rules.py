@@ -22,7 +22,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.title("🔤 Understanding Algebra Notation")
+st.markdown("<h1 style='text-align: center; color: #4f46e5;'>🔤 Understanding Algebra Notation</h1>", unsafe_allow_html=True)
 
 # Initialize session state
 if "responses" not in st.session_state:
