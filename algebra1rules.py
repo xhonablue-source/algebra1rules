@@ -49,9 +49,9 @@ Learn to read and understand basic algebra notation by connecting symbols to the
 **Key Concept:** Algebra notation is just a shorter way to write math operations we already know!
 """)
 
-# Section 1: Multiplication Without the × Symbol
+# Section 1: Multiplication Without the · Symbol
 st.markdown("---")
-st.markdown("### ✖️ Section 1: Multiplication Without the × Symbol")
+st.markdown("### ✖️ Section 1: Multiplication Without the · Symbol")
 st.markdown("**The Big Idea:** In algebra, we often skip writing the multiplication symbol!")
 
 # Interactive multiplication examples
@@ -76,21 +76,21 @@ for group in range(groups):
 
 ax1.set_xlim(-0.5, groups * 1.5)
 ax1.set_ylim(-0.5, items_per_group * 0.3 + 0.5)
-ax1.set_title(f'{multiplier}x means {multiplier} groups of x\n(if x = {x_value}, then {multiplier}x = {multiplier} × {x_value} = {multiplier * x_value})', 
+ax1.set_title(f'{multiplier}x means {multiplier} groups of x\n(if x = {x_value}, then {multiplier}x = {multiplier} · {x_value} = {multiplier * x_value})', 
               fontsize=14, fontweight='bold')
 ax1.axis('off')
 
 # Visual 2: Show the translation
 ax2.text(0.5, 0.7, f'{multiplier}x', fontsize=36, ha='center', va='center', fontweight='bold', color='blue')
 ax2.text(0.5, 0.5, '=', fontsize=24, ha='center', va='center')
-ax2.text(0.5, 0.3, f'{multiplier} × x', fontsize=24, ha='center', va='center', color='red')
+ax2.text(0.5, 0.3, f'{multiplier} · x', fontsize=24, ha='center', va='center', color='red')
 ax2.set_xlim(0, 1)
 ax2.set_ylim(0, 1)
 ax2.set_title('Algebra Notation ↔ Regular Math', fontsize=14, fontweight='bold')
 ax2.axis('off')
 
 # Visual 3: Multiple examples
-examples = [f'{multiplier}x = {multiplier} × x', f'{multiplier}y = {multiplier} × y', f'{multiplier}n = {multiplier} × n']
+examples = [f'{multiplier}x = {multiplier} · x', f'{multiplier}y = {multiplier} · y', f'{multiplier}n = {multiplier} · n']
 for i, example in enumerate(examples):
     ax3.text(0.5, 0.8 - i*0.2, example, fontsize=16, ha='center', va='center',
             bbox=dict(boxstyle="round,pad=0.3", facecolor="lightyellow"))
@@ -108,14 +108,14 @@ practice_col1, practice_col2 = st.columns(2)
 
 with practice_col1:
     q1 = st.selectbox("What does 5x mean?", 
-                     ["5 + x", "5 × x", "5 - x", "5 ÷ x"], key="q1")
+                     ["5 + x", "5 · x", "5 - x", "5 ÷ x"], key="q1")
     q2 = st.selectbox("What does 7y mean?", 
-                     ["7 + y", "7 × y", "7 - y", "7 ÷ y"], key="q2")
+                     ["7 + y", "7 · y", "7 - y", "7 ÷ y"], key="q2")
 
 with practice_col2:
     q3 = st.selectbox("If n = 6, what is 4n?", 
                      ["10", "24", "2", "1.5"], key="q3")
-    q4 = st.selectbox("Which means the same as 8 × m?", 
+    q4 = st.selectbox("Which means the same as 8 · m?", 
                      ["8 + m", "8m", "m + 8", "m - 8"], key="q4")
 
 # Section 2: Division with Fractions
@@ -206,14 +206,14 @@ fig3, (ax7, ax8) = plt.subplots(1, 2, figsize=(12, 5))
 # Visual 1: 3x/4 breakdown
 ax7.text(0.5, 0.9, f'{coeff}x/{divisor2}', fontsize=32, ha='center', va='center', fontweight='bold', color='purple')
 ax7.text(0.5, 0.7, '↓', fontsize=24, ha='center', va='center')
-ax7.text(0.5, 0.6, f'({coeff} × x) ÷ {divisor2}', fontsize=18, ha='center', va='center', color='blue')
+ax7.text(0.5, 0.6, f'({coeff} · x) ÷ {divisor2}', fontsize=18, ha='center', va='center', color='blue')
 ax7.text(0.5, 0.4, 'First multiply, then divide!', fontsize=14, ha='center', va='center', 
          bbox=dict(boxstyle="round,pad=0.3", facecolor="lightgreen"))
 
 if_x = 8
 result = (coeff * if_x) // divisor2
 ax7.text(0.5, 0.2, f'If x = {if_x}:', fontsize=14, ha='center', va='center')
-ax7.text(0.5, 0.1, f'{coeff}x/{divisor2} = ({coeff} × {if_x}) ÷ {divisor2} = {coeff * if_x} ÷ {divisor2} = {result}', 
+ax7.text(0.5, 0.1, f'{coeff}x/{divisor2} = ({coeff} · {if_x}) ÷ {divisor2} = {coeff * if_x} ÷ {divisor2} = {result}', 
          fontsize=12, ha='center', va='center', color='red')
 
 ax7.set_xlim(0, 1)
@@ -250,13 +250,13 @@ practice_col5, practice_col6 = st.columns(2)
 
 with practice_col5:
     q9 = st.selectbox("What does 6y/3 mean?", 
-                     ["(6 × y) ÷ 3", "6 + y ÷ 3", "6 × y × 3", "6 ÷ y ÷ 3"], key="q9")
+                     ["(6 · y) ÷ 3", "6 + y ÷ 3", "6 · y · 3", "6 ÷ y ÷ 3"], key="q9")
     q10 = st.selectbox("If a = 10, what is 2a/5?", 
                       ["4", "7", "25", "1"], key="q10")
 
 with practice_col6:
-    q11 = st.selectbox("What's another way to write (4 × n) ÷ 8?", 
-                      ["4n/8", "4 + n/8", "4/n8", "n/4 × 8"], key="q11")
+    q11 = st.selectbox("What's another way to write (4 · n) ÷ 8?", 
+                      ["4n/8", "4 + n/8", "4/n8", "n/4 · 8"], key="q11")
     q12 = st.selectbox("Which operation happens first in 5x/2?", 
                       ["Division", "Multiplication", "Addition", "Subtraction"], key="q12")
 
@@ -273,9 +273,9 @@ st.session_state.responses.update({
 
 # Answer key
 correct_answers = {
-    "Q1": "5 × x", "Q2": "7 × y", "Q3": "24", "Q4": "8m",
+    "Q1": "5 · x", "Q2": "7 · y", "Q3": "24", "Q4": "8m",
     "Q5": "x ÷ 4", "Q6": "m ÷ 10", "Q7": "4", "Q8": "n/3",
-    "Q9": "(6 × y) ÷ 3", "Q10": "4", "Q11": "4n/8", "Q12": "Multiplication"
+    "Q9": "(6 · y) ÷ 3", "Q10": "4", "Q11": "4n/8", "Q12": "Multiplication"
 }
 
 score = 0
@@ -301,9 +301,9 @@ st.markdown("### 📝 Key Takeaways")
 st.markdown("""
 **Remember these patterns:**
 
-1. **3x** means **3 × x** (multiplication without the × symbol)
+1. **3x** means **3 · x** (multiplication without the · symbol)
 2. **n/8** means **n ÷ 8** (division using fraction notation)  
-3. **5y/4** means **(5 × y) ÷ 4** (multiply first, then divide)
+3. **5y/4** means **(5 · y) ÷ 4** (multiply first, then divide)
 
 **The secret:** Algebra notation is just shorthand for operations you already know!
 """)
