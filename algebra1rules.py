@@ -217,7 +217,7 @@ ax.axis('off')
 
 st.pyplot(fig2)
 
-# Add a separate, clear pizza example
+# Add a separate, clear pizza example with evenly distributed pepperoni
 st.markdown("#### 🍕 Real-World Example: Pizza Division")
 fig3, ax_pizza = plt.subplots(figsize=(8, 8))
 
@@ -233,15 +233,31 @@ ax_pizza.add_patch(pizza)
 cheese = plt.Circle(pizza_center, pizza_radius * 0.95, color='#FFD700', alpha=0.7)
 ax_pizza.add_patch(cheese)
 
-# Add pepperoni
-np.random.seed(42)
-for _ in range(12):
-    angle = np.random.uniform(0, 2*np.pi)
-    distance = np.random.uniform(0, pizza_radius * 0.8)
-    x = pizza_center[0] + distance * np.cos(angle)
-    y = pizza_center[1] + distance * np.sin(angle)
-    pepperoni = plt.Circle((x, y), 0.025, color='#DC143C', alpha=0.9)
-    ax_pizza.add_patch(pepperoni)
+# Add pepperoni - distributed evenly across slices
+pepperoni_per_slice = 4  # 4 pepperoni per slice for even distribution
+np.random.seed(42)  # For consistent placement
+
+for slice_num in range(divisor):
+    # Calculate angle range for this slice
+    slice_start_angle = slice_num * 2 * np.pi / divisor
+    slice_end_angle = (slice_num + 1) * 2 * np.pi / divisor
+    slice_mid_angle = (slice_start_angle + slice_end_angle) / 2
+    
+    # Place pepperoni in this slice
+    for pep_num in range(pepperoni_per_slice):
+        # Random position within the slice
+        # Vary the angle slightly around the middle of the slice
+        angle_variation = (slice_end_angle - slice_start_angle) * 0.6  # Don't go too close to edges
+        angle = slice_mid_angle + np.random.uniform(-angle_variation/2, angle_variation/2)
+        
+        # Vary the distance from center
+        distance = np.random.uniform(pizza_radius * 0.2, pizza_radius * 0.8)
+        
+        x = pizza_center[0] + distance * np.cos(angle)
+        y = pizza_center[1] + distance * np.sin(angle)
+        
+        pepperoni = plt.Circle((x, y), 0.025, color='#DC143C', alpha=0.9)
+        ax_pizza.add_patch(pepperoni)
 
 # Draw slice lines
 for i in range(divisor):
@@ -328,7 +344,7 @@ st.markdown("#### 🎯 Complex Examples")
 coeff = st.slider("Choose a coefficient:", 2, 6, 3, key="coeff_slider")
 divisor2 = st.slider("Choose a divisor:", 2, 8, 4, key="div2_slider")
 
-fig3, (ax7, ax8) = plt.subplots(1, 2, figsize=(12, 5))
+fig4, (ax7, ax8) = plt.subplots(1, 2, figsize=(12, 5))
 
 # Visual 1: 3x/4 breakdown
 ax7.text(0.5, 0.9, f'{coeff}x/{divisor2}', fontsize=32, ha='center', va='center', fontweight='bold', color='purple')
@@ -369,7 +385,7 @@ ax8.set_ylim(0, 1)
 ax8.set_title(f'Visual: {coeff}x/{divisor2} with x = {if_x}', fontsize=14, fontweight='bold')
 ax8.axis('off')
 
-st.pyplot(fig3)
+st.pyplot(fig4)
 
 # Final practice
 st.markdown("#### 🎮 Challenge Practice")
