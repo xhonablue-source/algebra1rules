@@ -31,6 +31,33 @@ if "all_responses" not in st.session_state:
     st.session_state.all_responses = []
 
 # Student Information
+if "responses" not in st.session_state:
+    st.session_state.responses = {}
+if "all_responses" not in st.session_state:
+    st.session_state.all_responses = []
+
+# Michigan Learning Standards
+st.markdown("---")
+st.markdown("### 📚 Michigan Learning Standards Addressed")
+with st.expander("Click to view aligned standards"):
+    st.markdown("""
+    **6.EE.2** - Write, read, and evaluate expressions in which letters stand for numbers.
+    *Applied through: Reading algebraic notation like 3x and n/8, translating between algebraic and arithmetic expressions*
+    
+    **6.EE.6** - Use variables to represent numbers and write expressions when solving real-world problems.
+    *Applied through: Using variables in multiplication and division contexts, connecting to real situations*
+    
+    **5.OA.2** - Write simple expressions and interpret patterns in expressions.
+    *Applied through: Recognizing patterns in algebraic notation, understanding structure of expressions*
+    
+    **Mathematical Practices:**
+    - **MP.1** - Make sense of problems and persevere in solving them
+    - **MP.2** - Reason abstractly and quantitatively *(translating between notation systems)*
+    - **MP.3** - Construct viable arguments *(explaining why 3x means 3 · x)*
+    - **MP.6** - Attend to precision *(using correct mathematical notation)*
+    - **MP.7** - Look for structure *(recognizing patterns in algebraic expressions)*
+    """)
+st.markdown("---")
 st.markdown("### 👨‍🎓 Student Information")
 col1, col2 = st.columns(2)
 with col1:
@@ -126,78 +153,156 @@ st.markdown("**The Big Idea:** n/8 means n divided by 8, just like a fraction!")
 # Interactive division examples
 divisor = st.slider("Choose a divisor for examples:", 2, 10, 8, key="div_slider")
 
-# Create larger figure for better visibility
-fig2, (ax4, ax5, ax6) = plt.subplots(1, 3, figsize=(16, 6))
+# COMPLETELY REDESIGNED Division Visualization
+st.markdown("#### 🎯 Visual Examples: What n/8 Really Means")
 
-# Visual 1: Show n/8 as dividing into groups - IMPROVED
-n_value = 24  # Use 24 so it divides evenly by most numbers
-total_items = n_value
+# Create a much larger, clearer figure
+fig2, ax = plt.subplots(figsize=(14, 8))
+
+# Set up the layout
+n_value = 24
 groups = divisor
-items_per_group = total_items // groups
+items_per_group = n_value // groups
 
-# Draw the division with BIGGER, clearer visualization
-colors = plt.cm.Set3(np.linspace(0, 1, groups))
+# Title and explanation at the top
+ax.text(0.5, 0.95, f'n/{divisor} means n ÷ {divisor}', 
+        transform=ax.transAxes, fontsize=24, ha='center', va='top', fontweight='bold', color='blue')
+ax.text(0.5, 0.88, f'If n = {n_value}, then n/{divisor} = {n_value} ÷ {divisor} = {items_per_group}', 
+        transform=ax.transAxes, fontsize=18, ha='center', va='top', color='red')
+
+# Draw large, clear groups
+colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FECA57', '#FF9FF3', '#54A0FF', '#5F27CD']
+group_width = 0.8 / groups  # Divide the width among groups
+item_size = min(group_width * 0.8, 0.08)  # Reasonable item size
+
 for group in range(groups):
+    # Group background
+    group_x = 0.1 + group * group_width
+    group_color = colors[group % len(colors)]
+    
+    # Draw background rectangle for each group
+    rect = plt.Rectangle((group_x, 0.3), group_width * 0.9, 0.4, 
+                        facecolor=group_color, alpha=0.2, edgecolor=group_color, linewidth=2)
+    ax.add_patch(rect)
+    
+    # Add group label
+    ax.text(group_x + group_width * 0.45, 0.75, f'Group {group+1}', 
+            ha='center', va='center', fontsize=12, fontweight='bold', color=group_color)
+    
+    # Draw items in each group
+    items_per_row = 3
     for item in range(items_per_group):
-        row = item // 3  # 3 items per row
-        col = item % 3
-        x_pos = col * 0.8 + group * 3.5  # Better spacing
-        y_pos = row * 0.5 + 0.5
-        ax4.add_patch(plt.Circle((x_pos, y_pos), 0.15, color=colors[group], alpha=0.8))
+        row = item // items_per_row
+        col = item % items_per_row
+        
+        item_x = group_x + (col + 0.5) * (group_width * 0.9 / items_per_row)
+        item_y = 0.35 + row * 0.08
+        
+        circle = plt.Circle((item_x, item_y), item_size/2, 
+                          facecolor=group_color, edgecolor='black', linewidth=1)
+        ax.add_patch(circle)
+    
+    # Show count for each group
+    ax.text(group_x + group_width * 0.45, 0.2, f'{items_per_group} items', 
+            ha='center', va='center', fontsize=11, fontweight='bold')
 
-# Add group labels
-for group in range(groups):
-    ax4.text(group * 3.5 + 0.8, 0.1, f'Group {group+1}', ha='center', va='center', 
-            fontweight='bold', fontsize=10)
+# Add the equation at the bottom
+ax.text(0.5, 0.1, f'{n_value} items ÷ {divisor} groups = {items_per_group} items per group', 
+        transform=ax.transAxes, fontsize=16, ha='center', va='center', 
+        bbox=dict(boxstyle="round,pad=0.5", facecolor="lightyellow", edgecolor="orange"))
 
-ax4.set_xlim(-0.5, groups * 3.5)
-ax4.set_ylim(0, 3)
-ax4.set_title(f'n/{divisor} means n ÷ {divisor}\n(if n = {n_value}, then n/{divisor} = {n_value} ÷ {divisor} = {items_per_group})', 
-              fontsize=12, fontweight='bold')
-ax4.axis('off')
-
-# Visual 2: Show the translation
-ax5.text(0.5, 0.7, f'n/{divisor}', fontsize=36, ha='center', va='center', fontweight='bold', color='blue')
-ax5.text(0.5, 0.5, '=', fontsize=24, ha='center', va='center')
-ax5.text(0.5, 0.3, f'n ÷ {divisor}', fontsize=24, ha='center', va='center', color='red')
-ax5.set_xlim(0, 1)
-ax5.set_ylim(0, 1)
-ax5.set_title('Fraction Notation ↔ Division', fontsize=14, fontweight='bold')
-ax5.axis('off')
-
-# Visual 3: Pizza division example - IMPROVED
-# Draw a pizza divided into slices with better text placement
-circle = plt.Circle((0.5, 0.6), 0.35, color='orange', alpha=0.8, edgecolor='brown', linewidth=2)
-ax6.add_patch(circle)
-
-# Add pizza toppings for realism
-np.random.seed(42)  # For consistent pepperoni placement
-for _ in range(8):
-    x = 0.5 + 0.25 * np.random.uniform(-1, 1)
-    y = 0.6 + 0.25 * np.random.uniform(-1, 1)
-    if (x-0.5)**2 + (y-0.6)**2 <= 0.3**2:  # Only inside pizza
-        ax6.add_patch(plt.Circle((x, y), 0.02, color='red', alpha=0.8))
-
-# Draw slice lines
-for i in range(divisor):
-    angle = i * 360 / divisor
-    x_end = 0.5 + 0.35 * np.cos(np.radians(angle))
-    y_end = 0.6 + 0.35 * np.sin(np.radians(angle))
-    ax6.plot([0.5, x_end], [0.6, y_end], 'k-', linewidth=2)
-
-# Better text placement - no overlap!
-ax6.text(0.5, 0.2, f'Pizza ÷ {divisor}', fontsize=12, ha='center', va='center', 
-         fontweight='bold', bbox=dict(boxstyle="round,pad=0.2", facecolor="lightyellow"))
-ax6.text(0.5, 0.1, f'= {divisor} equal slices', fontsize=10, ha='center', va='center')
-
-ax6.set_xlim(0, 1)
-ax6.set_ylim(0, 1)
-ax6.set_title('Real-World Example', fontsize=12, fontweight='bold')
-ax6.axis('off')
+ax.set_xlim(0, 1)
+ax.set_ylim(0, 1)
+ax.axis('off')
 
 st.pyplot(fig2)
 
-# Practice questions for division
+# Add a separate, clear pizza example
+st.markdown("#### 🍕 Real-World Example: Pizza Division")
+fig3, ax_pizza = plt.subplots(figsize=(8, 8))
+
+# Draw a large, clear pizza
+pizza_center = (0.5, 0.5)
+pizza_radius = 0.35
+
+# Pizza base
+pizza = plt.Circle(pizza_center, pizza_radius, color='#D2691E', alpha=0.9, edgecolor='#8B4513', linewidth=3)
+ax_pizza.add_patch(pizza)
+
+# Add cheese layer
+cheese = plt.Circle(pizza_center, pizza_radius * 0.95, color='#FFD700', alpha=0.7)
+ax_pizza.add_patch(cheese)
+
+# Add pepperoni
+np.random.seed(42)
+for _ in range(12):
+    angle = np.random.uniform(0, 2*np.pi)
+    distance = np.random.uniform(0, pizza_radius * 0.8)
+    x = pizza_center[0] + distance * np.cos(angle)
+    y = pizza_center[1] + distance * np.sin(angle)
+    pepperoni = plt.Circle((x, y), 0.025, color='#DC143C', alpha=0.9)
+    ax_pizza.add_patch(pepperoni)
+
+# Draw slice lines
+for i in range(divisor):
+    angle = i * 2 * np.pi / divisor
+    x_end = pizza_center[0] + pizza_radius * np.cos(angle)
+    y_end = pizza_center[1] + pizza_radius * np.sin(angle)
+    ax_pizza.plot([pizza_center[0], x_end], [pizza_center[1], y_end], 'k-', linewidth=3)
+
+# Add labels
+ax_pizza.text(0.5, 0.9, f'Pizza ÷ {divisor} = {divisor} equal slices', 
+             transform=ax_pizza.transAxes, fontsize=16, ha='center', va='center', fontweight='bold')
+ax_pizza.text(0.5, 0.1, f'Each person gets 1/{divisor} of the pizza', 
+             transform=ax_pizza.transAxes, fontsize=14, ha='center', va='center',
+             bbox=dict(boxstyle="round,pad=0.3", facecolor="lightblue"))
+
+ax_pizza.set_xlim(0, 1)
+ax_pizza.set_ylim(0, 1)
+ax_pizza.set_aspect('equal')
+ax_pizza.axis('off')
+
+st.pyplot(fig3)
+
+# Analytical Thinking Questions
+st.markdown("---")
+st.markdown("### 🧠 Analytical Thinking: Why Does This Work?")
+st.markdown("*Think deeply about these concepts:*")
+
+analytical1 = st.text_area(
+    "1. **Pattern Recognition**: Look at 2x, 3x, 4x, 5x. What pattern do you notice? Why do you think mathematicians decided to drop the multiplication symbol?",
+    height=100,
+    key="analytical1",
+    placeholder="Think about: What's the same? What changes? Why might this be easier to write?"
+)
+
+analytical2 = st.text_area(
+    "2. **Real-World Connections**: Give three examples from everyday life where you might use division notation like n/4. Explain why fraction notation might be clearer than writing '÷'.",
+    height=100,
+    key="analytical2", 
+    placeholder="Examples: sharing pizza, dividing money, splitting time, etc."
+)
+
+analytical3 = st.text_area(
+    "3. **Mathematical Reasoning**: If 3x means 3 · x, what do you think 3xy might mean? Explain your reasoning and give an example with numbers.",
+    height=100,
+    key="analytical3",
+    placeholder="Think about: How does the pattern extend? What would happen if x=4 and y=5?"
+)
+
+analytical4 = st.text_area(
+    "4. **Order of Operations**: In the expression 6x/2, which operation happens first and why? How might parentheses help make this clearer?",
+    height=100,
+    key="analytical4",
+    placeholder="Consider: multiplication vs division, left to right, what parentheses would show the order clearly"
+)
+
+st.session_state.responses.update({
+    "Analytical_1": analytical1,
+    "Analytical_2": analytical2,
+    "Analytical_3": analytical3,
+    "Analytical_4": analytical4
+})
 st.markdown("#### 🎮 Practice: What do these mean?")
 practice_col3, practice_col4 = st.columns(2)
 
