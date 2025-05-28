@@ -126,26 +126,34 @@ st.markdown("**The Big Idea:** n/8 means n divided by 8, just like a fraction!")
 # Interactive division examples
 divisor = st.slider("Choose a divisor for examples:", 2, 10, 8, key="div_slider")
 
-fig2, (ax4, ax5, ax6) = plt.subplots(1, 3, figsize=(15, 5))
+# Create larger figure for better visibility
+fig2, (ax4, ax5, ax6) = plt.subplots(1, 3, figsize=(16, 6))
 
-# Visual 1: Show n/8 as dividing into groups
+# Visual 1: Show n/8 as dividing into groups - IMPROVED
 n_value = 24  # Use 24 so it divides evenly by most numbers
 total_items = n_value
 groups = divisor
 items_per_group = total_items // groups
 
-# Draw the division
+# Draw the division with BIGGER, clearer visualization
 colors = plt.cm.Set3(np.linspace(0, 1, groups))
 for group in range(groups):
     for item in range(items_per_group):
-        x_pos = (item % 6) + group * 7  # Arrange in a grid
-        y_pos = (item // 6) + group * 0.1
-        ax4.add_patch(plt.Circle((x_pos, y_pos), 0.3, color=colors[group]))
+        row = item // 3  # 3 items per row
+        col = item % 3
+        x_pos = col * 0.8 + group * 3.5  # Better spacing
+        y_pos = row * 0.5 + 0.5
+        ax4.add_patch(plt.Circle((x_pos, y_pos), 0.15, color=colors[group], alpha=0.8))
 
-ax4.set_xlim(-1, groups * 7)
-ax4.set_ylim(-1, 5)
+# Add group labels
+for group in range(groups):
+    ax4.text(group * 3.5 + 0.8, 0.1, f'Group {group+1}', ha='center', va='center', 
+            fontweight='bold', fontsize=10)
+
+ax4.set_xlim(-0.5, groups * 3.5)
+ax4.set_ylim(0, 3)
 ax4.set_title(f'n/{divisor} means n ÷ {divisor}\n(if n = {n_value}, then n/{divisor} = {n_value} ÷ {divisor} = {items_per_group})', 
-              fontsize=14, fontweight='bold')
+              fontsize=12, fontweight='bold')
 ax4.axis('off')
 
 # Visual 2: Show the translation
@@ -157,20 +165,34 @@ ax5.set_ylim(0, 1)
 ax5.set_title('Fraction Notation ↔ Division', fontsize=14, fontweight='bold')
 ax5.axis('off')
 
-# Visual 3: Pizza division example
-# Draw a pizza divided into slices
-circle = plt.Circle((0.5, 0.5), 0.4, color='orange', alpha=0.7)
+# Visual 3: Pizza division example - IMPROVED
+# Draw a pizza divided into slices with better text placement
+circle = plt.Circle((0.5, 0.6), 0.35, color='orange', alpha=0.8, edgecolor='brown', linewidth=2)
 ax6.add_patch(circle)
+
+# Add pizza toppings for realism
+np.random.seed(42)  # For consistent pepperoni placement
+for _ in range(8):
+    x = 0.5 + 0.25 * np.random.uniform(-1, 1)
+    y = 0.6 + 0.25 * np.random.uniform(-1, 1)
+    if (x-0.5)**2 + (y-0.6)**2 <= 0.3**2:  # Only inside pizza
+        ax6.add_patch(plt.Circle((x, y), 0.02, color='red', alpha=0.8))
+
+# Draw slice lines
 for i in range(divisor):
     angle = i * 360 / divisor
-    x_end = 0.5 + 0.4 * np.cos(np.radians(angle))
-    y_end = 0.5 + 0.4 * np.sin(np.radians(angle))
-    ax6.plot([0.5, x_end], [0.5, y_end], 'k-', linewidth=2)
+    x_end = 0.5 + 0.35 * np.cos(np.radians(angle))
+    y_end = 0.6 + 0.35 * np.sin(np.radians(angle))
+    ax6.plot([0.5, x_end], [0.6, y_end], 'k-', linewidth=2)
 
-ax6.text(0.5, 0.1, f'Pizza/{divisor} = Pizza ÷ {divisor}', fontsize=12, ha='center', va='center')
+# Better text placement - no overlap!
+ax6.text(0.5, 0.2, f'Pizza ÷ {divisor}', fontsize=12, ha='center', va='center', 
+         fontweight='bold', bbox=dict(boxstyle="round,pad=0.2", facecolor="lightyellow"))
+ax6.text(0.5, 0.1, f'= {divisor} equal slices', fontsize=10, ha='center', va='center')
+
 ax6.set_xlim(0, 1)
 ax6.set_ylim(0, 1)
-ax6.set_title('Real-World Example', fontsize=14, fontweight='bold')
+ax6.set_title('Real-World Example', fontsize=12, fontweight='bold')
 ax6.axis('off')
 
 st.pyplot(fig2)
