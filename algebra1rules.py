@@ -30,12 +30,6 @@ if "responses" not in st.session_state:
 if "all_responses" not in st.session_state:
     st.session_state.all_responses = []
 
-# Student Information
-if "responses" not in st.session_state:
-    st.session_state.responses = {}
-if "all_responses" not in st.session_state:
-    st.session_state.all_responses = []
-
 # Michigan Learning Standards
 st.markdown("---")
 st.markdown("### 📚 Michigan Learning Standards Addressed")
@@ -57,6 +51,7 @@ with st.expander("Click to view aligned standards"):
     - **MP.6** - Attend to precision *(using correct mathematical notation)*
     - **MP.7** - Look for structure *(recognizing patterns in algebraic expressions)*
     """)
+
 st.markdown("---")
 st.markdown("### 👨‍🎓 Student Information")
 col1, col2 = st.columns(2)
@@ -145,7 +140,7 @@ with practice_col2:
     q4 = st.selectbox("Which means the same as 8 · m?", 
                      ["8 + m", "8m", "m + 8", "m - 8"], key="q4")
 
-# Section 2: Division with Fractions
+# Section 2: Division with Fractions - NOW WITH INTERACTIVE PIZZA CUTTER!
 st.markdown("---")
 st.markdown("### ➗ Section 2: Division Using Fraction Notation")
 st.markdown("**The Big Idea:** n/8 means n divided by 8, just like a fraction!")
@@ -217,108 +212,308 @@ ax.axis('off')
 
 st.pyplot(fig2)
 
-# Add a separate, clear pizza example with evenly distributed pepperoni
-st.markdown("#### 🍕 Real-World Example: Pizza Division")
-fig3, ax_pizza = plt.subplots(figsize=(8, 8))
+# INTERACTIVE PIZZA CUTTER INTEGRATION
+st.markdown("#### 🍕 Interactive Pizza Division with Real Pizza Cutter!")
+st.markdown("**Try the interactive pizza cutter below to see division in action:**")
 
-# Draw a large, clear pizza
-pizza_center = (0.5, 0.5)
-pizza_radius = 0.35
+# Embed the interactive pizza cutter HTML
+pizza_cutter_html = f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }}
 
-# Pizza base
-pizza = plt.Circle(pizza_center, pizza_radius, color='#D2691E', alpha=0.9, edgecolor='#8B4513', linewidth=3)
-ax_pizza.add_patch(pizza)
+        .pizza-container {{
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            width: 100%;
+        }}
 
-# Add cheese layer
-cheese = plt.Circle(pizza_center, pizza_radius * 0.95, color='#FFD700', alpha=0.7)
-ax_pizza.add_patch(cheese)
+        .controls {{
+            margin-bottom: 20px;
+            text-align: center;
+        }}
 
-# Add pepperoni - distributed evenly across slices
-pepperoni_per_slice = 4  # 4 pepperoni per slice for even distribution
-np.random.seed(42)  # For consistent placement
+        .slider-label {{
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }}
 
-for slice_num in range(divisor):
-    # Calculate angle range for this slice
-    slice_start_angle = slice_num * 2 * np.pi / divisor
-    slice_end_angle = (slice_num + 1) * 2 * np.pi / divisor
-    slice_mid_angle = (slice_start_angle + slice_end_angle) / 2
-    
-    # Place pepperoni in this slice
-    for pep_num in range(pepperoni_per_slice):
-        # Random position within the slice
-        # Vary the angle slightly around the middle of the slice
-        angle_variation = (slice_end_angle - slice_start_angle) * 0.6  # Don't go too close to edges
-        angle = slice_mid_angle + np.random.uniform(-angle_variation/2, angle_variation/2)
-        
-        # Vary the distance from center
-        distance = np.random.uniform(pizza_radius * 0.2, pizza_radius * 0.8)
-        
-        x = pizza_center[0] + distance * np.cos(angle)
-        y = pizza_center[1] + distance * np.sin(angle)
-        
-        pepperoni = plt.Circle((x, y), 0.025, color='#DC143C', alpha=0.9)
-        ax_pizza.add_patch(pepperoni)
+        .slider {{
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #8B4513, #D2691E, #CD853F);
+            outline: none;
+            -webkit-appearance: none;
+            margin: 15px 0;
+            position: relative;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.3);
+            border: 2px solid #654321;
+        }}
 
-# Draw slice lines
-for i in range(divisor):
-    angle = i * 2 * np.pi / divisor
-    x_end = pizza_center[0] + pizza_radius * np.cos(angle)
-    y_end = pizza_center[1] + pizza_radius * np.sin(angle)
-    ax_pizza.plot([pizza_center[0], x_end], [pizza_center[1], y_end], 'k-', linewidth=3)
+        .slider::-webkit-slider-thumb {{
+            -webkit-appearance: none;
+            appearance: none;
+            width: 80px;
+            height: 80px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90"><defs><linearGradient id="woodHandle" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23DEB887"/><stop offset="20%" style="stop-color:%23D2691E"/><stop offset="50%" style="stop-color:%23CD853F"/><stop offset="80%" style="stop-color:%23A0522D"/><stop offset="100%" style="stop-color:%238B4513"/></linearGradient><radialGradient id="metalWheel" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:%23F5F5F5"/><stop offset="40%" style="stop-color:%23E8E8E8"/><stop offset="70%" style="stop-color:%23C0C0C0"/><stop offset="100%" style="stop-color:%23808080"/></radialGradient></defs><ellipse cx="45" cy="22" rx="10" ry="22" fill="url(%23woodHandle)" stroke="%23654321" stroke-width="1.5"/><line x1="38" y1="8" x2="40" y2="36" stroke="%23654321" stroke-width="1" opacity="0.7"/><line x1="50" y1="6" x2="52" y2="38" stroke="%23654321" stroke-width="1" opacity="0.7"/><ellipse cx="45" cy="12" rx="8" ry="2.5" fill="none" stroke="%23654321" stroke-width="0.8" opacity="0.5"/><ellipse cx="45" cy="17" rx="8" ry="2.5" fill="none" stroke="%23654321" stroke-width="0.8" opacity="0.5"/><ellipse cx="45" cy="22" rx="8" ry="2.5" fill="none" stroke="%23654321" stroke-width="0.8" opacity="0.5"/><ellipse cx="45" cy="27" rx="8" ry="2.5" fill="none" stroke="%23654321" stroke-width="0.8" opacity="0.5"/><ellipse cx="45" cy="32" rx="8" ry="2.5" fill="none" stroke="%23654321" stroke-width="0.8" opacity="0.5"/><ellipse cx="45" cy="8" rx="9" ry="4" fill="%23A0522D" stroke="%23654321" stroke-width="1"/><rect x="40" y="40" width="10" height="12" fill="%23A9A9A9" stroke="%23696969" stroke-width="1.5" rx="1"/><circle cx="43" cy="44" r="1.5" fill="%23696969"/><circle cx="47" cy="48" r="1.5" fill="%23696969"/><circle cx="45" cy="65" r="20" fill="url(%23metalWheel)" stroke="%23696969" stroke-width="2.5"/><circle cx="45" cy="65" r="18" fill="none" stroke="%23B8B8B8" stroke-width="1.5" opacity="0.8"/><circle cx="45" cy="65" r="15" fill="none" stroke="%23D3D3D3" stroke-width="1" opacity="0.6"/><circle cx="45" cy="65" r="4" fill="%23696969"/><circle cx="45" cy="65" r="19" fill="none" stroke="%23FF6B6B" stroke-width="1.5" opacity="0.4" stroke-dasharray="3,2"/></svg>') center/contain no-repeat;
+            cursor: grab;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }}
 
-# Add labels
-ax_pizza.text(0.5, 0.9, f'Pizza ÷ {divisor} = {divisor} equal slices', 
-             transform=ax_pizza.transAxes, fontsize=16, ha='center', va='center', fontweight='bold')
-ax_pizza.text(0.5, 0.1, f'Each person gets 1/{divisor} of the pizza', 
-             transform=ax_pizza.transAxes, fontsize=14, ha='center', va='center',
-             bbox=dict(boxstyle="round,pad=0.3", facecolor="lightblue"))
+        .slider::-webkit-slider-thumb:hover {{
+            transform: scale(1.1) rotate(10deg);
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+        }}
 
-ax_pizza.set_xlim(0, 1)
-ax_pizza.set_ylim(0, 1)
-ax_pizza.set_aspect('equal')
-ax_pizza.axis('off')
+        .slider::-webkit-slider-thumb:active {{
+            cursor: grabbing;
+            transform: scale(1.05) rotate(-8deg);
+        }}
 
-st.pyplot(fig3)
+        .slice-display {{
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            text-align: center;
+            border: 2px solid #fdcb6e;
+        }}
 
-# Analytical Thinking Questions
-st.markdown("---")
-st.markdown("### 🧠 Analytical Thinking: Why Does This Work?")
-st.markdown("*Think deeply about these concepts:*")
+        .slice-count {{
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2d3436;
+            margin: 0;
+        }}
 
-analytical1 = st.text_area(
-    "1. **Pattern Recognition**: Look at 2x, 3x, 4x, 5x. What pattern do you notice? Why do you think mathematicians decided to drop the multiplication symbol?",
-    height=100,
-    key="analytical1",
-    placeholder="Think about: What's the same? What changes? Why might this be easier to write?"
-)
+        .fraction-display {{
+            font-size: 1.2em;
+            color: #636e72;
+            margin: 5px 0;
+        }}
 
-analytical2 = st.text_area(
-    "2. **Real-World Connections**: Give three examples from everyday life where you might use division notation like n/4. Explain why fraction notation might be clearer than writing '÷'.",
-    height=100,
-    key="analytical2", 
-    placeholder="Examples: sharing pizza, dividing money, splitting time, etc."
-)
+        .math-explanation {{
+            background: linear-gradient(135deg, #a8e6cf, #dcedc1);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 2px solid #81c784;
+        }}
 
-analytical3 = st.text_area(
-    "3. **Mathematical Reasoning**: If 3x means 3 · x, what do you think 3xy might mean? Explain your reasoning and give an example with numbers.",
-    height=100,
-    key="analytical3",
-    placeholder="Think about: How does the pattern extend? What would happen if x=4 and y=5?"
-)
+        .highlight {{
+            background: rgba(255, 235, 59, 0.8);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }}
 
-analytical4 = st.text_area(
-    "4. **Order of Operations**: In the expression 6x/2, which operation happens first and why? How might parentheses help make this clearer?",
-    height=100,
-    key="analytical4",
-    placeholder="Consider: multiplication vs division, left to right, what parentheses would show the order clearly"
-)
+        .cutting-board {{
+            background: linear-gradient(45deg, #D2691E, #CD853F);
+            border-radius: 8px;
+            padding: 8px;
+            margin: 10px 0;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }}
 
-st.session_state.responses.update({
-    "Analytical_1": analytical1,
-    "Analytical_2": analytical2,
-    "Analytical_3": analytical3,
-    "Analytical_4": analytical4
-})
+        .instruction-text {{
+            font-size: 0.9em;
+            color: #555;
+            margin: 10px 0;
+            font-style: italic;
+        }}
+
+        .pepperoni {{
+            animation: pepperoniPop 0.6s ease-out;
+        }}
+
+        @keyframes pepperoniPop {{
+            0% {{ transform: scale(0); opacity: 0; }}
+            60% {{ transform: scale(1.2); opacity: 0.9; }}
+            100% {{ transform: scale(1); opacity: 1; }}
+        }}
+
+        .slice-line {{
+            animation: sliceDraw 0.8s ease-out;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 300;
+        }}
+
+        @keyframes sliceDraw {{
+            0% {{ stroke-dashoffset: 300; }}
+            100% {{ stroke-dashoffset: 0; }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="pizza-container">
+        <div class="controls">
+            <label class="slider-label">🔪 Drag the Pizza Cutter: <span id="sliceValue">{divisor}</span> slices</label>
+            <div class="instruction-text">← Fewer Slices &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; More Slices →</div>
+            <div class="cutting-board">
+                <input type="range" min="2" max="16" value="{divisor}" class="slider" id="sliceSlider">
+            </div>
+            
+            <div class="slice-display">
+                <p class="slice-count" id="sliceCount">{divisor} slices</p>
+                <p class="fraction-display">Each slice = <span class="highlight" id="fractionDisplay">1/{divisor}</span> of the pizza</p>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; margin: 20px 0;">
+            <svg width="350" height="350" id="pizzaSvg" style="filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));">
+                <circle cx="175" cy="175" r="160" fill="#D2691E" stroke="#8B4513" stroke-width="4"/>
+                <circle cx="175" cy="175" r="155" fill="#FFD700" opacity="0.8"/>
+                <circle cx="175" cy="175" r="150" fill="none" stroke="#F4D03F" stroke-width="1" opacity="0.5"/>
+            </svg>
+        </div>
+
+        <div class="math-explanation">
+            <div id="mathExplanation">
+                <p><strong>🍕 Pizza ÷ {divisor} = {divisor} equal slices</strong></p>
+                <p>Each slice = <span class="highlight">1/{divisor}</span> = <span class="highlight">{1/divisor:.3f}</span></p>
+                <p><strong>🔢 Algebra:</strong> If pizza = n, then each slice = <span class="highlight">n/{divisor}</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('sliceSlider');
+        const sliceValue = document.getElementById('sliceValue');
+        const sliceCount = document.getElementById('sliceCount');
+        const fractionDisplay = document.getElementById('fractionDisplay');
+        const mathExplanation = document.getElementById('mathExplanation');
+        const pizzaSvg = document.getElementById('pizzaSvg');
+
+        const centerX = 175;
+        const centerY = 175;
+        const radius = 150;
+
+        function generatePepperoni(numSlices) {{
+            const pepperoniPerSlice = 4;
+            const pepperoniData = [];
+            
+            let seed = 12345;
+            function seededRandom() {{
+                seed = (seed * 9301 + 49297) % 233280;
+                return seed / 233280;
+            }}
+            
+            for (let slice = 0; slice < numSlices; slice++) {{
+                const sliceStartAngle = (slice * 2 * Math.PI) / numSlices;
+                const sliceEndAngle = ((slice + 1) * 2 * Math.PI) / numSlices;
+                const sliceMidAngle = (sliceStartAngle + sliceEndAngle) / 2;
+                
+                for (let pep = 0; pep < pepperoniPerSlice; pep++) {{
+                    const angleVariation = (sliceEndAngle - sliceStartAngle) * 0.6;
+                    const angle = sliceMidAngle + (seededRandom() - 0.5) * angleVariation;
+                    const distance = radius * (0.3 + seededRandom() * 0.5);
+                    
+                    const x = centerX + distance * Math.cos(angle);
+                    const y = centerY + distance * Math.sin(angle);
+                    
+                    pepperoniData.push({{ x, y }});
+                }}
+            }}
+            
+            return pepperoniData;
+        }}
+
+        function updatePizza() {{
+            const numSlices = parseInt(slider.value);
+            
+            sliceValue.textContent = numSlices;
+            sliceCount.textContent = `${{numSlices}} slices`;
+            fractionDisplay.textContent = `1/${{numSlices}}`;
+            
+            const decimalValue = (1/numSlices).toFixed(3);
+            const percentage = ((1/numSlices) * 100).toFixed(1);
+            
+            mathExplanation.innerHTML = `
+                <p><strong>🍕 Pizza ÷ ${{numSlices}} = ${{numSlices}} equal slices</strong></p>
+                <p>Each slice = <span class="highlight">1/${{numSlices}}</span> = <span class="highlight">${{decimalValue}}</span> = <span class="highlight">${{percentage}}%</span></p>
+                <p><strong>🔢 Algebra:</strong> If pizza = n, then each slice = <span class="highlight">n/${{numSlices}}</span></p>
+            `;
+
+            const existingPepperoni = pizzaSvg.querySelectorAll('.pepperoni');
+            const existingLines = pizzaSvg.querySelectorAll('.slice-line');
+            existingPepperoni.forEach(p => p.remove());
+            existingLines.forEach(l => l.remove());
+
+            const pepperoniData = generatePepperoni(numSlices);
+            pepperoniData.forEach((pep, index) => {{
+                setTimeout(() => {{
+                    const pepperoni = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    pepperoni.setAttribute('cx', pep.x);
+                    pepperoni.setAttribute('cy', pep.y);
+                    pepperoni.setAttribute('r', '10');
+                    pepperoni.setAttribute('fill', '#DC143C');
+                    pepperoni.setAttribute('stroke', '#8B0000');
+                    pepperoni.setAttribute('stroke-width', '1');
+                    pepperoni.setAttribute('class', 'pepperoni');
+                    pizzaSvg.appendChild(pepperoni);
+                }}, index * 20);
+            }});
+
+            for (let i = 0; i < numSlices; i++) {{
+                setTimeout(() => {{
+                    const angle = (i * 2 * Math.PI) / numSlices;
+                    const x2 = centerX + radius * Math.cos(angle);
+                    const y2 = centerY + radius * Math.sin(angle);
+                    
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', centerX);
+                    line.setAttribute('y1', centerY);
+                    line.setAttribute('x2', x2);
+                    line.setAttribute('y2', y2);
+                    line.setAttribute('stroke', '#000');
+                    line.setAttribute('stroke-width', '3');
+                    line.setAttribute('stroke-linecap', 'round');
+                    line.setAttribute('class', 'slice-line');
+                    pizzaSvg.appendChild(line);
+                }}, i * 80 + 100);
+            }}
+        }}
+
+        slider.addEventListener('input', function() {{
+            const pizzaSvg = document.getElementById('pizzaSvg');
+            pizzaSvg.style.transform = 'rotate(1deg) scale(1.02)';
+            setTimeout(() => {{
+                pizzaSvg.style.transform = 'rotate(0deg) scale(1)';
+            }}, 100);
+            
+            updatePizza();
+        }});
+
+        updatePizza();
+    </script>
+</body>
+</html>
+"""
+
+# Display the interactive pizza cutter
+st.components.v1.html(pizza_cutter_html, height=600)
+
 st.markdown("#### 🎮 Practice: What do these mean?")
 practice_col3, practice_col4 = st.columns(2)
 
@@ -402,6 +597,46 @@ with practice_col6:
                       ["4n/8", "4 + n/8", "4/n8", "n/4 · 8"], key="q11")
     q12 = st.selectbox("Which operation happens first in 5x/2?", 
                       ["Division", "Multiplication", "Addition", "Subtraction"], key="q12")
+
+# Analytical Thinking Questions
+st.markdown("---")
+st.markdown("### 🧠 Analytical Thinking: Why Does This Work?")
+st.markdown("*Think deeply about these concepts:*")
+
+analytical1 = st.text_area(
+    "1. **Pattern Recognition**: Look at 2x, 3x, 4x, 5x. What pattern do you notice? Why do you think mathematicians decided to drop the multiplication symbol?",
+    height=100,
+    key="analytical1",
+    placeholder="Think about: What's the same? What changes? Why might this be easier to write?"
+)
+
+analytical2 = st.text_area(
+    "2. **Real-World Connections**: Give three examples from everyday life where you might use division notation like n/4. Explain why fraction notation might be clearer than writing '÷'.",
+    height=100,
+    key="analytical2", 
+    placeholder="Examples: sharing pizza, dividing money, splitting time, etc."
+)
+
+analytical3 = st.text_area(
+    "3. **Mathematical Reasoning**: If 3x means 3 · x, what do you think 3xy might mean? Explain your reasoning and give an example with numbers.",
+    height=100,
+    key="analytical3",
+    placeholder="Think about: How does the pattern extend? What would happen if x=4 and y=5?"
+)
+
+analytical4 = st.text_area(
+    "4. **Order of Operations**: In the expression 6x/2, which operation happens first and why? How might parentheses help make this clearer?",
+    height=100,
+    key="analytical4",
+    placeholder="Consider: multiplication vs division, left to right, what parentheses would show the order clearly"
+)
+
+st.session_state.responses.update({
+    "Analytical_1": analytical1,
+    "Analytical_2": analytical2,
+    "Analytical_3": analytical3,
+    "Analytical_4": analytical4
+})
 
 # Answer key and feedback
 st.markdown("---")
