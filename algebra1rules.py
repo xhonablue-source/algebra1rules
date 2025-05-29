@@ -523,7 +523,7 @@ pizza_cutter_html = f"""
 """
 
 # Display the interactive pizza cutter
-st.components.v1.html(pizza_cutter_html, height=600)
+st.components.v1.html(pizza_cutter_html, height=700)
 
 st.markdown("#### 🎮 Practice: What do these mean?")
 practice_col3, practice_col4 = st.columns(2)
