@@ -385,11 +385,11 @@ pizza_cutter_html = f"""
             </div>
         </div>
 
-        <div style="display: flex; justify-content: center; margin: 20px 0;">
-            <svg width="380" height="380" id="pizzaSvg" style="filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));">
-                <circle cx="190" cy="190" r="160" fill="#D2691E" stroke="#8B4513" stroke-width="4"/>
-                <circle cx="190" cy="190" r="155" fill="#FFD700" opacity="0.8"/>
-                <circle cx="190" cy="190" r="150" fill="none" stroke="#F4D03F" stroke-width="1" opacity="0.5"/>
+        <div style="display: flex; justify-content: center; margin: 20px 0 40px 0;">
+            <svg width="400" height="400" id="pizzaSvg" style="filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));">
+                <circle cx="200" cy="200" r="160" fill="#D2691E" stroke="#8B4513" stroke-width="4"/>
+                <circle cx="200" cy="200" r="155" fill="#FFD700" opacity="0.8"/>
+                <circle cx="200" cy="200" r="150" fill="none" stroke="#F4D03F" stroke-width="1" opacity="0.5"/>
             </svg>
         </div>
 
@@ -410,8 +410,8 @@ pizza_cutter_html = f"""
         const mathExplanation = document.getElementById('mathExplanation');
         const pizzaSvg = document.getElementById('pizzaSvg');
 
-        const centerX = 190;
-        const centerY = 190;
+        const centerX = 200;
+        const centerY = 200;
         const radius = 150;
 
         function generatePepperoni(numSlices) {{
