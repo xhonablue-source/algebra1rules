@@ -212,11 +212,11 @@ ax.axis('off')
 
 st.pyplot(fig2)
 
-# FIXED INTERACTIVE PIZZA CUTTER WITH PERFECT SYMMETRY AND REALISTIC PEPPERONI!
+# COMPLETELY FIXED INTERACTIVE PIZZA CUTTER - INSTANT UPDATES, REALISTIC PEPPERONI!
 st.markdown("#### 🍕 Interactive Pizza Division with Real Pizza Cutter!")
 st.markdown("**Try the interactive pizza cutter below to see division in action:**")
 
-# Embed the FIXED interactive pizza cutter HTML with realistic pepperoni distribution
+# Embed the COMPLETELY FIXED interactive pizza cutter HTML
 pizza_cutter_html = f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -359,15 +359,6 @@ pizza_cutter_html = f"""
             stroke-linecap: round;
             opacity: 1;
         }}
-
-        .permanent-line {{
-            animation: sliceDrawOnce 0.8s ease-out;
-        }}
-
-        @keyframes sliceDrawOnce {{
-            0% {{ stroke-dasharray: 300; stroke-dashoffset: 300; }}
-            100% {{ stroke-dasharray: none; stroke-dashoffset: 0; }}
-        }}
     </style>
 </head>
 <body>
@@ -428,8 +419,6 @@ pizza_cutter_html = f"""
             // REALISTIC PIZZA APPROACH: Distribute pepperoni across the whole pizza first,
             // then let the slice lines cut through wherever they fall - just like real pizza!
             
-            const totalPepperoni = Math.max(16, numSlices * 2); // More pepperoni for bigger pizzas
-            
             // Create rings of pepperoni from center outward (like real pizza makers)
             const rings = [
                 {{ radius: 0.2, count: 3 }},     // Center ring - a few pieces
@@ -482,7 +471,7 @@ pizza_cutter_html = f"""
             return pepperoniData;
         }}
 
-        // FIXED: Perfect symmetrical pizza slicing
+        // COMPLETELY FIXED: Perfect symmetrical pizza slicing with INSTANT UPDATES!
         function updatePizza() {{
             const numSlices = parseInt(slider.value);
             
@@ -499,52 +488,48 @@ pizza_cutter_html = f"""
                 <p><strong>🔢 Algebra:</strong> If pizza = n, then each slice = <span class="highlight">n/${{numSlices}}</span></p>
             `;
 
-            // Clear ALL existing elements
+            // Clear ALL existing elements INSTANTLY
             const existingPepperoni = pizzaSvg.querySelectorAll('.pepperoni');
             const existingLines = pizzaSvg.querySelectorAll('.slice-line');
             existingPepperoni.forEach(p => p.remove());
             existingLines.forEach(l => l.remove());
 
             // FIX: Calculate EXACT angles with perfect symmetry
-            const exactAngleStep = (2 * Math.PI) / numSlices; // Perfect mathematical division
+            const exactAngleStep = (2 * Math.PI) / numSlices;
             
-            // Add pepperoni using REALISTIC pizza distribution!
+            // Add pepperoni INSTANTLY - no delays!
             const pepperoniData = generatePepperoni(numSlices);
-            pepperoniData.forEach((pep, index) => {{
-                setTimeout(() => {{
-                    const pepperoni = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                    pepperoni.setAttribute('cx', pep.x);
-                    pepperoni.setAttribute('cy', pep.y);
-                    pepperoni.setAttribute('r', pep.size || 10); // Use variable sizes
-                    pepperoni.setAttribute('fill', '#DC143C');
-                    pepperoni.setAttribute('stroke', '#8B0000');
-                    pepperoni.setAttribute('stroke-width', '1');
-                    pepperoni.setAttribute('class', 'pepperoni');
-                    pizzaSvg.appendChild(pepperoni);
-                }}, index * 15); // Faster animation
+            pepperoniData.forEach((pep) => {{
+                const pepperoni = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                pepperoni.setAttribute('cx', pep.x);
+                pepperoni.setAttribute('cy', pep.y);
+                pepperoni.setAttribute('r', pep.size || 10);
+                pepperoni.setAttribute('fill', '#DC143C');
+                pepperoni.setAttribute('stroke', '#8B0000');
+                pepperoni.setAttribute('stroke-width', '1');
+                pepperoni.setAttribute('class', 'pepperoni');
+                pizzaSvg.appendChild(pepperoni);
             }});
 
-            // FIX: Draw lines with PERFECT symmetry - each calculated independently using i * (2π / numSlices)
+            // FIX: Draw lines INSTANTLY with PERFECT symmetry - NO DELAYS!
             for (let i = 0; i < numSlices; i++) {{
-                setTimeout(() => {{
-                    // CRITICAL FIX: Beautiful formula in action! Calculate each angle independently from zero
-                    const exactAngle = i * exactAngleStep; // No accumulation, no drift - pure math!
-                    
-                    // Calculate endpoint with maximum precision
-                    const x2 = centerX + radius * Math.cos(exactAngle);
-                    const y2 = centerY + radius * Math.sin(exactAngle);
-                    
-                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                    line.setAttribute('x1', centerX);
-                    line.setAttribute('y1', centerY);
-                    line.setAttribute('x2', x2.toFixed(2)); // Round to prevent floating point issues
-                    line.setAttribute('y2', y2.toFixed(2));
-                    line.setAttribute('stroke', '#000');
-                    line.setAttribute('stroke-width', '4');
-                    line.setAttribute('stroke-linecap', 'round');
-                    line.setAttribute('class', 'slice-line permanent-line');
-                    pizzaSvg.appendChild(line);
-                }}, i * 60 + 50);
+                // CRITICAL FIX: Calculate each angle independently from zero
+                const exactAngle = i * exactAngleStep;
+                
+                // Calculate endpoint with maximum precision
+                const x2 = centerX + radius * Math.cos(exactAngle);
+                const y2 = centerY + radius * Math.sin(exactAngle);
+                
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', centerX);
+                line.setAttribute('y1', centerY);
+                line.setAttribute('x2', x2.toFixed(2));
+                line.setAttribute('y2', y2.toFixed(2));
+                line.setAttribute('stroke', '#000');
+                line.setAttribute('stroke-width', '4');
+                line.setAttribute('stroke-linecap', 'round');
+                line.setAttribute('class', 'slice-line');
+                pizzaSvg.appendChild(line);
             }}
         }}
 
@@ -564,7 +549,7 @@ pizza_cutter_html = f"""
 </html>
 """
 
-# Display the FIXED interactive pizza cutter with realistic pepperoni distribution
+# Display the COMPLETELY FIXED interactive pizza cutter
 st.components.v1.html(pizza_cutter_html, height=700)
 
 st.markdown("#### 🎮 Practice: What do these mean?")
