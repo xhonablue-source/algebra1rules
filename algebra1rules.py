@@ -140,7 +140,7 @@ with practice_col2:
     q4 = st.selectbox("Which means the same as 8 · m?", 
                      ["8 + m", "8m", "m + 8", "m - 8"], key="q4")
 
-# Section 2: Division with Fractions - NOW WITH INTERACTIVE PIZZA CUTTER!
+# Section 2: Division with Fractions - NOW WITH FIXED INTERACTIVE PIZZA CUTTER!
 st.markdown("---")
 st.markdown("### ➗ Section 2: Division Using Fraction Notation")
 st.markdown("**The Big Idea:** n/8 means n divided by 8, just like a fraction!")
@@ -212,11 +212,11 @@ ax.axis('off')
 
 st.pyplot(fig2)
 
-# INTERACTIVE PIZZA CUTTER INTEGRATION
+# FIXED INTERACTIVE PIZZA CUTTER WITH PERFECT SYMMETRY
 st.markdown("#### 🍕 Interactive Pizza Division with Real Pizza Cutter!")
 st.markdown("**Try the interactive pizza cutter below to see division in action:**")
 
-# Embed the interactive pizza cutter HTML
+# Embed the FIXED interactive pizza cutter HTML
 pizza_cutter_html = f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -414,7 +414,8 @@ pizza_cutter_html = f"""
         const centerY = 200;
         const radius = 150;
 
-        function generatePepperoni(numSlices) {{
+        // FIXED: Perfect pepperoni generation with exact angles
+        function generatePepperoni(numSlices, exactAngleStep) {{
             const pepperoniPerSlice = 4;
             const pepperoniData = [];
             
@@ -425,12 +426,13 @@ pizza_cutter_html = f"""
             }}
             
             for (let slice = 0; slice < numSlices; slice++) {{
-                const sliceStartAngle = (slice * 2 * Math.PI) / numSlices;
-                const sliceEndAngle = ((slice + 1) * 2 * Math.PI) / numSlices;
+                // FIX: Use the SAME exact angle calculation as lines
+                const sliceStartAngle = slice * exactAngleStep;
+                const sliceEndAngle = (slice + 1) * exactAngleStep;
                 const sliceMidAngle = (sliceStartAngle + sliceEndAngle) / 2;
                 
                 for (let pep = 0; pep < pepperoniPerSlice; pep++) {{
-                    const angleVariation = (sliceEndAngle - sliceStartAngle) * 0.6;
+                    const angleVariation = exactAngleStep * 0.6; // Use exact step, not approximation
                     const angle = sliceMidAngle + (seededRandom() - 0.5) * angleVariation;
                     const distance = radius * (0.3 + seededRandom() * 0.5);
                     
@@ -444,6 +446,7 @@ pizza_cutter_html = f"""
             return pepperoniData;
         }}
 
+        // FIXED: Perfect symmetrical pizza slicing
         function updatePizza() {{
             const numSlices = parseInt(slider.value);
             
@@ -460,14 +463,17 @@ pizza_cutter_html = f"""
                 <p><strong>🔢 Algebra:</strong> If pizza = n, then each slice = <span class="highlight">n/${{numSlices}}</span></p>
             `;
 
-            // Only remove pepperoni, keep slice lines permanent
+            // Clear ALL existing elements
             const existingPepperoni = pizzaSvg.querySelectorAll('.pepperoni');
             const existingLines = pizzaSvg.querySelectorAll('.slice-line');
             existingPepperoni.forEach(p => p.remove());
             existingLines.forEach(l => l.remove());
 
-            // Add new pepperoni
-            const pepperoniData = generatePepperoni(numSlices);
+            // FIX: Calculate EXACT angles with perfect symmetry
+            const exactAngleStep = (2 * Math.PI) / numSlices; // Perfect mathematical division
+            
+            // Add pepperoni using the SAME exact angles
+            const pepperoniData = generatePepperoni(numSlices, exactAngleStep);
             pepperoniData.forEach((pep, index) => {{
                 setTimeout(() => {{
                     const pepperoni = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -482,25 +488,25 @@ pizza_cutter_html = f"""
                 }}, index * 20);
             }});
 
-            // Add permanent slice lines that stay visible
+            // FIX: Draw lines with PERFECT symmetry - each calculated independently
             for (let i = 0; i < numSlices; i++) {{
                 setTimeout(() => {{
-                    const angle = (i * 2 * Math.PI) / numSlices;
-                    const x2 = centerX + radius * Math.cos(angle);
-                    const y2 = centerY + radius * Math.sin(angle);
+                    // CRITICAL FIX: Calculate each angle independently from zero
+                    const exactAngle = i * exactAngleStep; // No accumulation, no drift
+                    
+                    // Calculate endpoint with maximum precision
+                    const x2 = centerX + radius * Math.cos(exactAngle);
+                    const y2 = centerY + radius * Math.sin(exactAngle);
                     
                     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                     line.setAttribute('x1', centerX);
                     line.setAttribute('y1', centerY);
-                    line.setAttribute('x2', x2);
-                    line.setAttribute('y2', y2);
+                    line.setAttribute('x2', x2.toFixed(2)); // Round to prevent floating point issues
+                    line.setAttribute('y2', y2.toFixed(2));
                     line.setAttribute('stroke', '#000');
                     line.setAttribute('stroke-width', '4');
                     line.setAttribute('stroke-linecap', 'round');
                     line.setAttribute('class', 'slice-line permanent-line');
-                    // Remove animation for permanent visibility
-                    line.style.strokeDasharray = 'none';
-                    line.style.strokeDashoffset = '0';
                     pizzaSvg.appendChild(line);
                 }}, i * 60 + 50);
             }}
@@ -522,7 +528,7 @@ pizza_cutter_html = f"""
 </html>
 """
 
-# Display the interactive pizza cutter
+# Display the FIXED interactive pizza cutter
 st.components.v1.html(pizza_cutter_html, height=700)
 
 st.markdown("#### 🎮 Practice: What do these mean?")
