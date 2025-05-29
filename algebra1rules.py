@@ -354,14 +354,19 @@ pizza_cutter_html = f"""
         }}
 
         .slice-line {{
-            animation: sliceDraw 0.8s ease-out;
-            stroke-dasharray: 300;
-            stroke-dashoffset: 300;
+            stroke: #000;
+            stroke-width: 4;
+            stroke-linecap: round;
+            opacity: 1;
         }}
 
-        @keyframes sliceDraw {{
-            0% {{ stroke-dashoffset: 300; }}
-            100% {{ stroke-dashoffset: 0; }}
+        .permanent-line {{
+            animation: sliceDrawOnce 0.8s ease-out;
+        }}
+
+        @keyframes sliceDrawOnce {{
+            0% {{ stroke-dasharray: 300; stroke-dashoffset: 300; }}
+            100% {{ stroke-dasharray: none; stroke-dashoffset: 0; }}
         }}
     </style>
 </head>
@@ -455,11 +460,13 @@ pizza_cutter_html = f"""
                 <p><strong>🔢 Algebra:</strong> If pizza = n, then each slice = <span class="highlight">n/${{numSlices}}</span></p>
             `;
 
+            // Only remove pepperoni, keep slice lines permanent
             const existingPepperoni = pizzaSvg.querySelectorAll('.pepperoni');
             const existingLines = pizzaSvg.querySelectorAll('.slice-line');
             existingPepperoni.forEach(p => p.remove());
             existingLines.forEach(l => l.remove());
 
+            // Add new pepperoni
             const pepperoniData = generatePepperoni(numSlices);
             pepperoniData.forEach((pep, index) => {{
                 setTimeout(() => {{
@@ -475,6 +482,7 @@ pizza_cutter_html = f"""
                 }}, index * 20);
             }});
 
+            // Add permanent slice lines that stay visible
             for (let i = 0; i < numSlices; i++) {{
                 setTimeout(() => {{
                     const angle = (i * 2 * Math.PI) / numSlices;
@@ -487,11 +495,14 @@ pizza_cutter_html = f"""
                     line.setAttribute('x2', x2);
                     line.setAttribute('y2', y2);
                     line.setAttribute('stroke', '#000');
-                    line.setAttribute('stroke-width', '3');
+                    line.setAttribute('stroke-width', '4');
                     line.setAttribute('stroke-linecap', 'round');
-                    line.setAttribute('class', 'slice-line');
+                    line.setAttribute('class', 'slice-line permanent-line');
+                    // Remove animation for permanent visibility
+                    line.style.strokeDasharray = 'none';
+                    line.style.strokeDashoffset = '0';
                     pizzaSvg.appendChild(line);
-                }}, i * 80 + 100);
+                }}, i * 60 + 50);
             }}
         }}
 
