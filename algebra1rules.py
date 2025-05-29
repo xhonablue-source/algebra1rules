@@ -551,3 +551,239 @@ pizza_cutter_html = f"""
         slider.addEventListener('input', function() {{
             const pizzaSvg = document.getElementById('pizzaSvg');
             pizzaSvg.style.transform = 'rotate(1deg) scale(1.02)';
+            setTimeout(() => {{
+                pizzaSvg.style.transform = 'rotate(0deg) scale(1)';
+            }}, 100);
+            
+            updatePizza();
+        }});
+
+        updatePizza();
+    </script>
+</body>
+</html>
+"""
+
+# Display the FIXED interactive pizza cutter with realistic pepperoni distribution
+st.components.v1.html(pizza_cutter_html, height=700)
+
+st.markdown("#### 🎮 Practice: What do these mean?")
+practice_col3, practice_col4 = st.columns(2)
+
+with practice_col3:
+    q5 = st.selectbox("What does x/4 mean?", 
+                     ["x + 4", "x × 4", "x - 4", "x ÷ 4"], key="q5")
+    q6 = st.selectbox("What does m/10 mean?", 
+                     ["m + 10", "m × 10", "m - 10", "m ÷ 10"], key="q6")
+
+with practice_col4:
+    q7 = st.selectbox("If y = 20, what is y/5?", 
+                     ["25", "100", "4", "15"], key="q7")
+    q8 = st.selectbox("Which means the same as n ÷ 3?", 
+                     ["3n", "n/3", "n + 3", "3/n"], key="q8")
+
+# Section 3: Combined Operations
+st.markdown("---")
+st.markdown("### 🔄 Section 3: Combining Operations")
+st.markdown("**The Big Idea:** We can combine multiplication and division in algebra notation!")
+
+# Interactive combined examples
+st.markdown("#### 🎯 Complex Examples")
+coeff = st.slider("Choose a coefficient:", 2, 6, 3, key="coeff_slider")
+divisor2 = st.slider("Choose a divisor:", 2, 8, 4, key="div2_slider")
+
+fig4, (ax7, ax8) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Visual 1: 3x/4 breakdown
+ax7.text(0.5, 0.9, f'{coeff}x/{divisor2}', fontsize=32, ha='center', va='center', fontweight='bold', color='purple')
+ax7.text(0.5, 0.7, '↓', fontsize=24, ha='center', va='center')
+ax7.text(0.5, 0.6, f'({coeff} · x) ÷ {divisor2}', fontsize=18, ha='center', va='center', color='blue')
+ax7.text(0.5, 0.4, 'First multiply, then divide!', fontsize=14, ha='center', va='center', 
+         bbox=dict(boxstyle="round,pad=0.3", facecolor="lightgreen"))
+
+if_x = 8
+result = (coeff * if_x) // divisor2
+ax7.text(0.5, 0.2, f'If x = {if_x}:', fontsize=14, ha='center', va='center')
+ax7.text(0.5, 0.1, f'{coeff}x/{divisor2} = ({coeff} · {if_x}) ÷ {divisor2} = {coeff * if_x} ÷ {divisor2} = {result}', 
+         fontsize=12, ha='center', va='center', color='red')
+
+ax7.set_xlim(0, 1)
+ax7.set_ylim(0, 1)
+ax7.set_title('Order of Operations', fontsize=14, fontweight='bold')
+ax7.axis('off')
+
+# Visual 2: Visual representation
+# Show coeff groups of x, then divide by divisor2
+total_x = coeff * if_x
+items_per_group = total_x // divisor2
+
+for group in range(divisor2):
+    group_color = plt.cm.Set1(group / divisor2)
+    for item in range(items_per_group):
+        x_pos = group + item * 0.1
+        y_pos = 0.5 + group * 0.1
+        ax8.text(x_pos, y_pos, 'x', fontsize=12, ha='center', va='center',
+                bbox=dict(boxstyle="circle,pad=0.05", facecolor=group_color))
+
+ax8.text(2, 0.8, f'{coeff}x = {total_x} total x\'s', fontsize=12, ha='center', va='center')
+ax8.text(2, 0.2, f'÷ {divisor2} = {items_per_group} in each group', fontsize=12, ha='center', va='center')
+
+ax8.set_xlim(-0.5, 4)
+ax8.set_ylim(0, 1)
+ax8.set_title(f'Visual: {coeff}x/{divisor2} with x = {if_x}', fontsize=14, fontweight='bold')
+ax8.axis('off')
+
+st.pyplot(fig4)
+
+# Final practice
+st.markdown("#### 🎮 Challenge Practice")
+practice_col5, practice_col6 = st.columns(2)
+
+with practice_col5:
+    q9 = st.selectbox("What does 6y/3 mean?", 
+                     ["(6 · y) ÷ 3", "6 + y ÷ 3", "6 · y · 3", "6 ÷ y ÷ 3"], key="q9")
+    q10 = st.selectbox("If a = 10, what is 2a/5?", 
+                      ["4", "7", "25", "1"], key="q10")
+
+with practice_col6:
+    q11 = st.selectbox("What's another way to write (4 · n) ÷ 8?", 
+                      ["4n/8", "4 + n/8", "4/n8", "n/4 · 8"], key="q11")
+    q12 = st.selectbox("Which operation happens first in 5x/2?", 
+                      ["Division", "Multiplication", "Addition", "Subtraction"], key="q12")
+
+# Analytical Thinking Questions
+st.markdown("---")
+st.markdown("### 🧠 Analytical Thinking: Why Does This Work?")
+st.markdown("*Think deeply about these concepts:*")
+
+analytical1 = st.text_area(
+    "1. **Pattern Recognition**: Look at 2x, 3x, 4x, 5x. What pattern do you notice? Why do you think mathematicians decided to drop the multiplication symbol?",
+    height=100,
+    key="analytical1",
+    placeholder="Think about: What's the same? What changes? Why might this be easier to write?"
+)
+
+analytical2 = st.text_area(
+    "2. **Real-World Connections**: Give three examples from everyday life where you might use division notation like n/4. Explain why fraction notation might be clearer than writing '÷'.",
+    height=100,
+    key="analytical2", 
+    placeholder="Examples: sharing pizza, dividing money, splitting time, etc."
+)
+
+analytical3 = st.text_area(
+    "3. **Mathematical Reasoning**: If 3x means 3 · x, what do you think 3xy might mean? Explain your reasoning and give an example with numbers.",
+    height=100,
+    key="analytical3",
+    placeholder="Think about: How does the pattern extend? What would happen if x=4 and y=5?"
+)
+
+analytical4 = st.text_area(
+    "4. **Order of Operations**: In the expression 6x/2, which operation happens first and why? How might parentheses help make this clearer?",
+    height=100,
+    key="analytical4",
+    placeholder="Consider: multiplication vs division, left to right, what parentheses would show the order clearly"
+)
+
+st.session_state.responses.update({
+    "Analytical_1": analytical1,
+    "Analytical_2": analytical2,
+    "Analytical_3": analytical3,
+    "Analytical_4": analytical4
+})
+
+# Answer key and feedback
+st.markdown("---")
+st.markdown("### ✅ Check Your Understanding")
+
+# Store all responses
+st.session_state.responses.update({
+    "Q1": q1, "Q2": q2, "Q3": q3, "Q4": q4,
+    "Q5": q5, "Q6": q6, "Q7": q7, "Q8": q8,
+    "Q9": q9, "Q10": q10, "Q11": q11, "Q12": q12
+})
+
+# Answer key
+correct_answers = {
+    "Q1": "5 · x", "Q2": "7 · y", "Q3": "24", "Q4": "8m",
+    "Q5": "x ÷ 4", "Q6": "m ÷ 10", "Q7": "4", "Q8": "n/3",
+    "Q9": "(6 · y) ÷ 3", "Q10": "4", "Q11": "4n/8", "Q12": "Multiplication"
+}
+
+score = 0
+for q_num in correct_answers:
+    if st.session_state.responses.get(q_num) == correct_answers[q_num]:
+        score += 1
+
+if st.button("🎯 Check My Answers", type="primary"):
+    st.markdown(f"### 📊 Your Score: {score}/12 ({(score/12)*100:.0f}%)")
+    
+    if score == 12:
+        st.success("🌟 Perfect! You've mastered algebra notation!")
+    elif score >= 10:
+        st.success("🎯 Excellent work! You understand the concepts very well!")
+    elif score >= 8:
+        st.info("👍 Good job! Review the concepts you missed and try again!")
+    else:
+        st.warning("📚 Keep practicing! Focus on the visual examples above.")
+
+# Summary section
+st.markdown("---")
+st.markdown("### 📝 Key Takeaways")
+st.markdown("""
+**Remember these patterns:**
+
+1. **3x** means **3 · x** (multiplication without the · symbol)
+2. **n/8** means **n ÷ 8** (division using fraction notation)  
+3. **5y/4** means **(5 · y) ÷ 4** (multiply first, then divide)
+
+**The secret:** Algebra notation is just shorthand for operations you already know!
+""")
+
+# Submit section
+st.markdown("---")
+if st.button("✅ Submit My Work", type="primary"):
+    if name and date:
+        st.session_state.all_responses.append(st.session_state.responses.copy())
+        st.success(f"Great work {name}! Your score: {score}/12 ({(score/12)*100:.0f}%)")
+    else:
+        st.error("Please enter your name and date before submitting!")
+
+# Teacher access (password protected)
+st.markdown("---")
+teacher_password = st.text_input("🏫 Teacher Access Code:", type="password", key="teacher_pass")
+
+if teacher_password == "algebra2025":
+    st.markdown("### 📊 Teacher Dashboard")
+    if st.session_state.all_responses:
+        df = pd.DataFrame(st.session_state.all_responses)
+        st.dataframe(df, use_container_width=True)
+        
+        # Calculate class average
+        if len(df) > 0:
+            # Count correct answers for each student
+            total_scores = []
+            for _, row in df.iterrows():
+                student_score = 0
+                for q_num in correct_answers:
+                    if row.get(q_num) == correct_answers[q_num]:
+                        student_score += 1
+                total_scores.append(student_score)
+            
+            avg_score = np.mean(total_scores)
+            st.metric("Class Average", f"{avg_score:.1f}/12 ({(avg_score/12)*100:.0f}%)")
+            
+        # Download option
+        csv = df.to_csv(index=False)
+        st.download_button(
+            label="📥 Download Class Data",
+            data=csv,
+            file_name="algebra_notation_responses.csv",
+            mime="text/csv"
+        )
+    else:
+        st.info("No student responses yet.")
+elif teacher_password and teacher_password != "algebra2025":
+    st.error("❌ Incorrect access code")
+
+st.markdown("---")
+st.markdown("*Keep practicing! Algebra notation gets easier with repetition! 🌟*")
